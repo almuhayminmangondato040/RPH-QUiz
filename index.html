@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chronicles of the Archipelago — Chapter 2</title>
+<style>
+*{box-sizing:border-box}
+:root{
+ --ink:#2a2017;--brown:#4b2d1b;--gold:#b58a46;--paper:#f3e6cb;
+ --paper2:#fff9ec;--red:#7d2c25;--green:#2f6742;--shadow:rgba(25,16,8,.38)
+}
+html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif;color:var(--ink)}
+body{
+ min-height:100vh;
+ background:
+ radial-gradient(circle at 12% 12%,rgba(255,255,255,.18),transparent 21%),
+ radial-gradient(circle at 85% 80%,rgba(29,13,6,.22),transparent 29%),
+ linear-gradient(135deg,#4b2f1d,#91663e 46%,#3d2719);
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;
+ background-image:
+  repeating-linear-gradient(0deg,transparent 0 4px,rgba(0,0,0,.18) 5px),
+  repeating-linear-gradient(90deg,transparent 0 8px,rgba(255,255,255,.12) 9px)
+}
+.wrap{max-width:1160px;margin:auto;padding:26px 15px 55px}
+.mast{color:#f5e9d2;text-align:center;text-shadow:0 2px 4px #24160c;margin-bottom:18px}
+.mast .orn{font-size:42px;letter-spacing:10px}
+.mast h1{margin:2px 0 7px;font-size:clamp(30px,5.3vw,58px);letter-spacing:2px;text-transform:uppercase;line-height:1.03}
+.mast p{margin:0;font-size:14px;letter-spacing:2px}
+.frame{
+ background:var(--paper);border:9px double var(--gold);border-radius:10px;
+ box-shadow:0 28px 70px var(--shadow);position:relative;overflow:hidden
+}
+.frame:before,.frame:after{position:absolute;top:5px;color:var(--gold);font-size:26px}
+.frame:before{content:"⚜";left:14px}.frame:after{content:"⚜";right:14px}
+.inner{padding:30px}
+.eyebrow{color:#755431;font-size:12px;letter-spacing:2.2px;font-weight:900;text-transform:uppercase}
+h2{font-size:31px;margin:5px 0 10px}
+.center{text-align:center;max-width:900px;margin:auto}
+.intro{line-height:1.65;color:#5b432c}
+.ribbon{
+ display:inline-block;padding:9px 17px;background:var(--brown);color:#f8edd9;
+ font-weight:900;letter-spacing:1.2px;border-radius:4px;box-shadow:0 3px 0 rgba(0,0,0,.18)
+}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:24px 0}
+.lesson-card{
+ background:rgba(255,249,236,.8);border:1px solid #ccb993;border-radius:7px;padding:15px;
+ box-shadow:inset 0 0 0 2px rgba(181,138,70,.12)
+}
+.lesson-card .num{color:var(--red);font-weight:900}
+.lesson-card strong{display:block;margin:3px 0 6px;font-size:17px}
+.lesson-card span{font-size:14px;color:#6b5238;line-height:1.45}
+.full{grid-column:1/-1}
+.controls{display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap;margin-top:15px}
+button,select{font:inherit}
+.btn{
+ border:0;border-radius:5px;padding:13px 18px;font-weight:900;cursor:pointer;
+ box-shadow:0 3px 0 rgba(0,0,0,.2)
+}
+.primary{background:var(--brown);color:#f9ecd6}
+.primary:hover{filter:brightness(1.13);transform:translateY(-1px)}
+.secondary{background:#dfcdae;color:var(--ink)}
+select{border:1px solid #bca47f;background:#fff7e8;padding:11px 12px;border-radius:5px;font-weight:900}
+.hidden{display:none!important}
+.topbar{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin-bottom:19px}
+.progress{height:14px;border:1px solid #b99a69;background:#dfcfb0;border-radius:999px;overflow:hidden}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,#6f2b21,#c49040);transition:width .25s}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.badge{background:#472d1c;color:#f7ebd5;padding:9px 12px;border-radius:5px;font-weight:900;white-space:nowrap}
+.meta{color:#785632;font-weight:900;margin-bottom:8px;letter-spacing:.4px}
+.q{font-size:clamp(22px,3.2vw,35px);line-height:1.26;margin:0 0 18px}
+.choices{display:grid;gap:11px}
+.choice{
+ width:100%;border:1px solid #bba27c;background:#fff9ed;color:var(--ink);
+ padding:15px 16px;border-radius:7px;text-align:left;cursor:pointer;
+ box-shadow:0 2px 0 rgba(61,39,23,.1);font-size:16px
+}
+.choice:hover:not(:disabled){background:#f5e5c7;border-color:#9d7745;transform:translateY(-1px)}
+.choice:disabled{cursor:default}
+.choice.correct{background:#e4f1e4;border-color:var(--green)}
+.choice.wrong{background:#f5dcd7;border-color:var(--red)}
+.letter{
+ display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;
+ background:#e3d5b9;border-radius:3px;font-weight:900;margin-right:9px
+}
+.feedback{
+ display:none;margin-top:18px;padding:15px;background:#fff8e7;border:1px solid #c9b389;
+ border-left:6px solid var(--gold);border-radius:5px;line-height:1.58
+}
+.feedback.good{display:block;border-left-color:var(--green);background:#edf7ee}
+.feedback.bad{display:block;border-left-color:var(--red);background:#fbeae7}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.result{text-align:center}
+.seal{
+ margin:0 auto 12px;width:128px;height:128px;border-radius:50%;border:4px double var(--gold);
+ display:flex;align-items:center;justify-content:center;background:#eadbbd;
+ color:var(--brown);font-size:21px;font-weight:900;line-height:1.05;transform:rotate(-4deg)
+}
+.big{font-size:74px;font-weight:950;line-height:1}
+.msg{font-size:20px;font-weight:900;margin:11px 0}
+.pills{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:18px 0}
+.pill{background:#e9d7b5;border:1px solid #c7ad82;border-radius:20px;padding:8px 12px;font-weight:900}
+.review{margin-top:26px;text-align:left;display:grid;gap:10px}
+.review h3{text-align:center}
+.review-item{background:var(--paper2);border:1px solid #cdb993;padding:14px;border-radius:6px}
+.review-item .rq{font-weight:900;margin-bottom:7px}
+.note{font-size:12px;color:#6c5337;text-align:center;line-height:1.5;margin-top:15px}
+.chapter-bar{
+ display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+ padding:12px 14px;background:#ead9ba;border:1px solid #c6aa79;border-radius:6px;margin-bottom:17px;font-weight:900
+}
+@media(max-width:760px){
+ .grid{grid-template-columns:1fr}.full{grid-column:auto}
+ .topbar{grid-template-columns:1fr}.inner{padding:20px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="mast">
+ <div class="orn">⚜︎ ☩ ⚔︎ ☩ ⚜︎</div>
+ <h1>Chronicles of the Archipelago</h1>
+ <p>CHAPTER II • IRRESISTIBLE SOURCES TO EXPLORE • LESSONS 1–7</p>
+</header>
+
+<div class="frame"><div class="inner">
+<section id="start">
+ <div class="center">
+  <div class="eyebrow">THE GREAT ARCHIVE EXAMINATION</div>
+  <h2>100-Question Historical Mastery Game</h2>
+  <div class="ribbon">SEVEN LESSONS • 100 RECORDS • ONE CHALLENGE</div>
+  <p class="intro">
+   Enter the archive and test the seven Chapter 2 lessons: <b>Customs of the Tagalogs</b>,
+   the <b>First Mass</b>, the <b>Cavite Mutiny</b>, the <b>Rizal Retraction</b>,
+   the <b>Cry of Balintawak/Pugad Lawin</b>, the <b>Kartilya ng Katipunan</b>,
+   and the <b>Act of the Declaration of Philippine Independence</b>.
+   This game tests people, dates, places, documents, controversies, source criticism,
+   and the major values/concepts from the review.
+  </p>
+ </div>
+
+ <div class="grid">
+  <div class="lesson-card"><div class="num">01</div><strong>Customs of the Tagalogs</strong><span>Plasencia • datu • barangay • maharlika • aliping classes • customs • beliefs • colonial perspective</span></div>
+  <div class="lesson-card"><div class="num">02</div><strong>Site of the First Mass</strong><span>Pigafetta • Magellan • March 31, 1521 • Mazaua • Limasawa • Valderama • location debate</span></div>
+  <div class="lesson-card"><div class="num">03</div><strong>Cavite Mutiny</strong><span>1872 • GOMBURZA • February 17 • competing accounts • nationalism • source comparison</span></div>
+  <div class="lesson-card"><div class="num">04</div><strong>Retraction of Dr. Jose Rizal</strong><span>1896 • December 30 • authenticity • provenance • external/internal criticism • controversy</span></div>
+  <div class="lesson-card"><div class="num">05</div><strong>Cry of Balintawak / Pugad Lawin</strong><span>Bonifacio • Katipunan • 1896 • cedulas • August 23 • eyewitness disagreement</span></div>
+  <div class="lesson-card"><div class="num">06</div><strong>Kartilya ng Katipunan</strong><span>Emilio Jacinto • 13 teachings • equality • character • justice • respect for women</span></div>
+  <div class="lesson-card full"><div class="num">07</div><strong>Act of the Declaration of Philippine Independence</strong><span>June 12, 1898 • Kawit • Aguinaldo • Ambrosio Rianzares Bautista • flag • Marcela Agoncillo • Julian Felipe • Acta</span></div>
+ </div>
+
+ <div class="controls">
+  <label for="count"><b>Run length:</b></label>
+  <select id="count">
+   <option value="100" selected>100 — Complete Archive</option>
+   <option value="50">50 — Short Expedition</option>
+   <option value="25">25 — Quick Review</option>
+  </select>
+  <button class="btn primary" onclick="startQuiz()">OPEN THE ARCHIVE ⚔︎</button>
+ </div>
+ <div class="note">Full mode uses all 100 questions. Short modes sample across all seven lessons.</div>
+ <div class="note">Study aid based on the Chapter 2 topics we reviewed; it is not a verbatim reproduction of a textbook.</div>
+</section>
+
+<section id="quiz" class="hidden">
+ <div class="topbar">
+  <div class="progress"><div id="bar"></div></div>
+  <div class="stats">
+   <div class="badge">SCORE <span id="score">0</span></div>
+   <div class="badge">STREAK <span id="streak">0</span> 🔥</div>
+  </div>
+ </div>
+ <div class="chapter-bar"><span id="meta"></span><span>Read the record carefully.</span></div>
+ <h2 class="q" id="question"></h2>
+ <div class="choices" id="choices"></div>
+ <div id="feedback" class="feedback"></div>
+ <div class="actions">
+  <button id="next" class="btn primary hidden" onclick="nextQuestion()">TURN THE PAGE →</button>
+  <button class="btn secondary" onclick="restart()">RESTART ARCHIVE</button>
+ </div>
+</section>
+
+<section id="result" class="result hidden">
+ <div class="seal">ARCHIVE<br>SEALED</div>
+ <div class="eyebrow">EXAMINATION COMPLETED</div>
+ <div class="big"><span id="final">0</span>/<span id="total">0</span></div>
+ <div class="msg" id="message"></div>
+ <div class="pills">
+  <div class="pill">Correct: <span id="correct">0</span></div>
+  <div class="pill">Incorrect: <span id="wrong">0</span></div>
+  <div class="pill">Accuracy: <span id="accuracy">0%</span></div>
+ </div>
+ <div class="controls"><button class="btn primary" onclick="restart()">BEGIN A NEW CHRONICLE</button></div>
+ <div id="review" class="review"></div>
+</section>
+</div></div>
+</div>
+
+<script>
+const BANK = [{"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Who wrote the account commonly known as “Customs of the Tagalogs”?", "options": ["Antonio Pigafetta", "Fray Juan de Plasencia", "Emilio Jacinto", "Ambrosio Rianzares Bautista"], "answer": 1, "explanation": "Juan de Plasencia wrote the important colonial-era account describing Tagalog society and customs."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "What is a barangay in Plasencia’s account?", "options": ["A type of ship", "A Spanish church rank", "A local political/community unit", "A revolutionary newspaper"], "answer": 2, "explanation": "A barangay was a local community or political unit led by a datu."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Who led a barangay?", "options": ["The encomendero", "The gobernadorcillo", "The friar", "The datu"], "answer": 3, "explanation": "The datu was the chief or leader of the barangay described in the account."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Which group did Plasencia identify as a higher-status free class associated with a datu’s community?", "options": ["Maharlika", "Aliping sa guiguilir", "Aliping namamahay", "Spanish friars"], "answer": 0, "explanation": "Maharlika were described as a free, higher-status class in Plasencia’s classification."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "What did aliping namamahay generally refer to?", "options": ["A barangay chief", "A dependent who maintained a household and had obligations", "A Spanish soldier", "A Catholic priest"], "answer": 1, "explanation": "Aliping namamahay were dependents who generally had their own home and obligations to a master."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "What did aliping sa guiguilir generally refer to?", "options": ["A Spanish governor", "A datu’s political adviser", "A dependent who lived in the master’s household", "A foreign trader"], "answer": 2, "explanation": "Aliping sa guiguilir were described as household dependents who lived with and served a master."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Which topic is directly covered by Plasencia’s account?", "options": ["Modern elections", "Steam engines", "World War II", "Marriage and inheritance"], "answer": 3, "explanation": "The document discusses social organization, marriage, inheritance, customs, beliefs, and laws."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Why is “Customs of the Tagalogs” valuable to historians?", "options": ["It preserves evidence about Tagalog society in the colonial period", "It was written from the future", "It is a fictional novel", "It contains only Spanish military orders"], "answer": 0, "explanation": "The account gives evidence about customs and institutions observed in the early Spanish colonial period."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Why should Plasencia’s account be read critically?", "options": ["Old documents are always false", "It reflects the viewpoint and context of a Spanish missionary", "It contains no observations", "The author is unknown"], "answer": 1, "explanation": "A source can be useful while still reflecting the author’s religious, colonial, cultural, or institutional perspective."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Which pair is correctly matched?", "options": ["Plasencia — First Mass account", "Plasencia — Kartilya ng Katipunan", "Plasencia — Customs of the Tagalogs", "Plasencia — Act of Independence"], "answer": 2, "explanation": "Juan de Plasencia is associated with Customs of the Tagalogs."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Which term is associated with indigenous Tagalog religious beliefs in the account?", "options": ["Galleons", "Cedulas", "Katipuneros", "Anitos"], "answer": 3, "explanation": "Anitos refers to spirits or supernatural entities associated with indigenous Philippine beliefs."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "What is a major lesson from studying Tagalog social classes?", "options": ["Society had organized status, duties, and relationships", "Everyone had exactly the same role", "Only Spanish ranks mattered", "Social organization did not exist"], "answer": 0, "explanation": "Plasencia’s classification shows an organized social structure with different statuses and obligations."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "What kinds of customs are included in the account?", "options": ["Only food recipes", "Government, law, religion, marriage, inheritance, and social relations", "Only military battles", "Only geography"], "answer": 1, "explanation": "The account is broad and discusses several areas of Tagalog social and cultural life."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "What is the best historical reading strategy for Plasencia’s work?", "options": ["Ignore the source because it is colonial", "Accept every statement as completely neutral", "Use the information as evidence while considering the author’s perspective and purpose", "Never compare it with another source"], "answer": 2, "explanation": "Historians can learn from the source while also analyzing authorship, purpose, context, and possible bias."}, {"lesson": "Lesson 1 — Customs of the Tagalogs", "q": "Why is authorship important when evaluating this document?", "options": ["It proves all statements are true", "Authorship never affects meaning", "It changes the date of the document", "The author’s background can shape what he noticed, emphasized, and interpreted"], "answer": 3, "explanation": "Knowing who produced a source helps explain perspective, purpose, limitations, and possible bias."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "On what date was the famous Easter Sunday Mass celebrated during the 1521 expedition?", "options": ["March 31, 1521", "June 12, 1898", "August 23, 1896", "February 17, 1872"], "answer": 0, "explanation": "The Mass associated with Magellan’s expedition is dated March 31, 1521."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Who recorded the famous account of Magellan’s expedition used in the First Mass discussion?", "options": ["Juan de Plasencia", "Antonio Pigafetta", "Emilio Jacinto", "Jose Burgos"], "answer": 1, "explanation": "Antonio Pigafetta was the expedition chronicler whose narrative is a major primary source."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Who led the expedition that reached the Philippine islands in 1521?", "options": ["Andres Bonifacio", "Emilio Aguinaldo", "Ferdinand Magellan", "Jose Rizal"], "answer": 2, "explanation": "Ferdinand Magellan led the expedition that reached the islands in 1521."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Which place is officially recognized by the Philippine government as the site of the 1521 First Mass?", "options": ["Cavite Arsenal", "Kawit, Cavite", "Balintawak", "Limasawa, Southern Leyte"], "answer": 3, "explanation": "The National Historical Commission of the Philippines recognizes Limasawa, Southern Leyte."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "What place-name in Pigafetta’s account is central to the site discussion?", "options": ["Mazaua", "Maynilad", "Intramuros", "Cavite"], "answer": 0, "explanation": "Mazaua is the name associated with the place in Pigafetta’s account and later location debate."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Who is traditionally identified as the priest who celebrated the Mass?", "options": ["Fr. Mariano Gomez", "Fr. Pedro de Valderama", "Fr. Jose Burgos", "Fr. Jacinto Zamora"], "answer": 1, "explanation": "Fr. Pedro de Valderama is traditionally identified as the priest who celebrated the Mass."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Which local leaders are associated with the First Mass account?", "options": ["Aguinaldo and Bautista", "Andres Bonifacio and Emilio Jacinto", "Rajah Kolambu and Rajah Siagu", "Gomez and Burgos"], "answer": 2, "explanation": "Pigafetta’s narrative mentions local rulers including Rajah Kolambu and Rajah Siagu."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "What is the best memory chain for the First Mass lesson?", "options": ["1898 → Plasencia → Mazaua → Cavite", "1896 → Bonifacio → Kawit → Independence", "1872 → GOMBURZA → Limasawa", "1521 → Pigafetta → Mazaua → Limasawa"], "answer": 3, "explanation": "This connects the date, chronicler, historical place-name, and officially recognized site."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Why has the First Mass site been debated by historians?", "options": ["Different readings of historical accounts and geographic clues led to competing interpretations", "No source exists", "The Mass was never recorded", "All historians always agreed on every detail"], "answer": 0, "explanation": "The debate comes from interpretation of narrative descriptions, routes, geography, and source traditions."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Which source is especially important for reconstructing the expedition’s route?", "options": ["The Kartilya", "Pigafetta’s account", "Rizal’s retraction", "The 1898 Act of Independence"], "answer": 1, "explanation": "Pigafetta’s account is a key contemporary narrative of the expedition."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Which institution is associated with the official historical-site position in the Philippines?", "options": ["La Solidaridad", "Katipunan", "National Historical Commission of the Philippines", "Malolos Congress"], "answer": 2, "explanation": "The NHCP is the government historical agency that evaluates and recognizes historical sites."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "What historical skill is shown when Pigafetta’s text is compared with geographic clues?", "options": ["Ignoring primary evidence", "Guessing", "Memorizing only", "Corroboration and source-based analysis"], "answer": 3, "explanation": "Historians compare different kinds of evidence to test an interpretation."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "Which statement is safest about the First Mass controversy?", "options": ["The event is documented, while interpretations of the exact site have been debated", "There is no account of it", "The site was universally agreed on from the start", "The event definitely occurred at every proposed location"], "answer": 0, "explanation": "The event and accounts are real, but the interpretation of the exact location has been debated."}, {"lesson": "Lesson 2 — Site of the First Mass", "q": "What is the main reason Pigafetta is important in this lesson?", "options": ["He founded the Katipunan", "He provided a contemporary eyewitness-era account of the expedition", "He wrote the Kartilya", "He proclaimed independence"], "answer": 1, "explanation": "Pigafetta’s narrative provides firsthand-era evidence about the expedition’s journey and encounters."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "In what year did the Cavite Mutiny occur?", "options": ["1896", "1521", "1872", "1898"], "answer": 2, "explanation": "The Cavite Mutiny took place in 1872."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "Which trio is known as GOMBURZA?", "options": ["Gomez, Plasencia, Pigafetta", "Gomez, Bonifacio, Rizal", "Aguinaldo, Burgos, Bautista", "Mariano Gomez, Jose Burgos, Jacinto Zamora"], "answer": 3, "explanation": "GOMBURZA combines the surnames of Fathers Gomez, Burgos, and Zamora."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "When were GOMBURZA executed?", "options": ["February 17, 1872", "March 31, 1521", "June 12, 1898", "December 30, 1896"], "answer": 0, "explanation": "The three priests were executed on February 17, 1872."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "What happened to GOMBURZA after the mutiny?", "options": ["They joined the Katipunan", "They were executed after being accused of involvement", "They wrote the Kartilya", "They led Magellan’s expedition"], "answer": 1, "explanation": "The priests were accused of complicity and executed, later becoming important symbols of nationalism."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "Why is the Cavite Mutiny important to Filipino nationalism?", "options": ["It was the First Mass", "It immediately ended Spanish rule", "The execution of GOMBURZA became a powerful symbol that influenced later nationalist thinking", "It was the declaration of independence"], "answer": 2, "explanation": "The fate of GOMBURZA became a powerful memory in the growth of Filipino nationalism."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "Why do historians compare different accounts of the Cavite Mutiny?", "options": ["Historical events cannot have competing interpretations", "There is only one account", "All accounts are identical", "Different accounts emphasize different causes, scale, and meanings"], "answer": 3, "explanation": "Competing colonial and Filipino interpretations make source comparison important."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "What is the best approach when studying conflicting mutiny accounts?", "options": ["Examine authorship, purpose, context, and evidence in each account", "Accept the colonial account automatically", "Accept the nationalist account automatically", "Ignore the sources"], "answer": 0, "explanation": "Historical analysis requires evaluating each source rather than choosing a side without evidence."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "Which person was NOT part of GOMBURZA?", "options": ["Mariano Gomez", "Andres Bonifacio", "Jose Burgos", "Jacinto Zamora"], "answer": 1, "explanation": "Bonifacio was a later revolutionary leader, not one of the three priests."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "Which event occurred earlier?", "options": ["Rizal’s execution in 1896", "Cry of 1896", "Cavite Mutiny of 1872", "Declaration of Independence in 1898"], "answer": 2, "explanation": "1872 comes before the major events of 1896 and 1898."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "Why should the Cavite Mutiny not be reduced to one simplistic story?", "options": ["Only legends exist", "The event had no significance", "Dates never matter", "Historical sources can present different perspectives and interpretations"], "answer": 3, "explanation": "The mutiny is a classic example of why historians compare sources and interpretations."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "Which priest was part of GOMBURZA?", "options": ["Father Jose Burgos", "Father Pedro de Valderama", "Fray Juan de Plasencia", "Father Mariano Pelaez"], "answer": 0, "explanation": "Jose Burgos was one of the three priests in GOMBURZA."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "Which date is associated with the execution of GOMBURZA?", "options": ["August 23, 1896", "February 17, 1872", "December 30, 1896", "June 12, 1898"], "answer": 1, "explanation": "GOMBURZA were executed on February 17, 1872."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "What broader historical skill does the mutiny lesson develop?", "options": ["Memorizing one viewpoint only", "Avoiding evidence", "Comparing sources and recognizing perspective", "Ignoring context"], "answer": 2, "explanation": "The lesson teaches source criticism, especially comparing accounts produced for different purposes."}, {"lesson": "Lesson 3 — The Cavite Mutiny", "q": "What key sequence should you remember?", "options": ["1521 → GOMBURZA → Bonifacio", "1872 → First Mass → Limasawa", "1898 → Cavite Mutiny → GOMBURZA", "1872 → Cavite Mutiny → GOMBURZA → nationalism"], "answer": 3, "explanation": "This is the core timeline-and-significance chain for the lesson."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "What question lies at the center of the Rizal Retraction lesson?", "options": ["Whether Rizal genuinely signed and made the alleged retraction", "Whether Rizal founded the Katipunan", "Whether Rizal wrote the Kartilya", "Whether Rizal led Magellan’s expedition"], "answer": 0, "explanation": "The controversy concerns the authenticity, circumstances, wording, and interpretation of the alleged retraction."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "When was Jose Rizal executed?", "options": ["February 17, 1872", "December 30, 1896", "June 12, 1898", "March 31, 1521"], "answer": 1, "explanation": "Rizal was executed on December 30, 1896."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "Why is the retraction document controversial?", "options": ["It was written in 1521", "No one has ever examined it", "Historians have debated its authenticity, wording, circumstances, and meaning", "It is part of the Kartilya"], "answer": 2, "explanation": "The document has long been debated and examined as historical evidence."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "What is the best approach to the retraction controversy?", "options": ["Ignore all Rizal documents", "Accept it automatically because it is famous", "Reject it automatically because it is controversial", "Analyze the document, its provenance, context, wording, and related evidence"], "answer": 3, "explanation": "Controversial sources require careful source criticism and comparison."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "What does the retraction controversy teach about primary sources?", "options": ["A primary source can still require authenticity and reliability checks", "Primary sources are always perfectly true", "Primary sources have no context", "Primary sources are always useless"], "answer": 0, "explanation": "Being contemporary does not make a source immune from authenticity, perspective, or reliability questions."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "Which question is external criticism?", "options": ["What did Rizal mean by the wording?", "Is the document genuinely from the claimed time and source tradition?", "How convincing is the argument?", "What does the Church believe today?"], "answer": 1, "explanation": "External criticism tests authenticity and provenance rather than the content’s meaning."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "Which question is internal criticism?", "options": ["Where is the physical copy stored?", "Is the paper physically original?", "How credible and meaningful are the document’s claims?", "Is the handwriting old-looking?"], "answer": 2, "explanation": "Internal criticism evaluates content, credibility, meaning, consistency, and reliability."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "Why does timing matter when analyzing the alleged retraction?", "options": ["It places Rizal in 1521", "It changes Rizal’s birth date", "It proves it is false", "It places the document in the context of Rizal’s final days before execution"], "answer": 3, "explanation": "Dating the document helps historians understand the circumstances in which it was supposedly produced."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "What should a student avoid when discussing a debated document?", "options": ["Declaring it completely true or false without examining evidence", "Checking provenance", "Considering context", "Comparing sources"], "answer": 0, "explanation": "Historical reasoning should weigh evidence rather than rely on unsupported certainty."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "Which person is the subject of the alleged retraction?", "options": ["Emilio Aguinaldo", "Jose Rizal", "Andres Bonifacio", "Antonio Pigafetta"], "answer": 1, "explanation": "The alleged retraction is attributed to Jose Rizal."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "What is provenance?", "options": ["A revolutionary oath", "A type of social class", "The history of a source’s origin, custody, and transmission", "A place in Cavite"], "answer": 2, "explanation": "Provenance traces where a source came from and how it was preserved or transmitted."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "Why can provenance matter in a document controversy?", "options": ["It changes the author’s identity", "It proves every statement inside the document", "It eliminates interpretation", "It can help establish whether the source’s origin and transmission are plausible"], "answer": 3, "explanation": "A trustworthy provenance can strengthen confidence in a source, while gaps may raise questions."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "Which event came immediately around Rizal’s final historical period?", "options": ["His execution on December 30, 1896", "The First Mass in 1521", "The Cavite Mutiny in 1872", "The declaration in Kawit in 1898"], "answer": 0, "explanation": "The retraction controversy concerns Rizal’s final days shortly before his execution in 1896."}, {"lesson": "Lesson 4 — Retraction of Dr. Jose Rizal", "q": "What major historical skill is modeled by the Retraction lesson?", "options": ["Memorizing a single interpretation", "Analyzing controversial primary evidence without assuming an answer", "Ignoring documents", "Using only modern opinions"], "answer": 1, "explanation": "The lesson is a case study in how historians investigate contested evidence."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "Who is most closely associated with the Cry?", "options": ["Juan de Plasencia", "Antonio Pigafetta", "Andres Bonifacio", "Ambrosio Rianzares Bautista"], "answer": 2, "explanation": "Andres Bonifacio was a central leader of the Katipunan and is strongly associated with the Cry."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "What year is associated with the Cry and the outbreak of the Philippine Revolution?", "options": ["1521", "1872", "1898", "1896"], "answer": 3, "explanation": "The Cry is associated with the beginning of the Philippine Revolution in 1896."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "What famous act is associated with the Cry?", "options": ["Tearing the cedulas", "Signing the Act of Independence", "Celebrating the First Mass", "Writing the Kartilya"], "answer": 0, "explanation": "The tearing of cedulas is a famous symbol of rejecting Spanish colonial authority."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "What were cedulas?", "options": ["Katipunan swords", "Residence certificates/identification-tax documents under Spanish rule", "Priestly robes", "A type of galleon"], "answer": 1, "explanation": "Cedulas were official residence/identification-tax documents under Spanish colonial administration."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "Why are Balintawak and Pugad Lawin both discussed?", "options": ["One was the First Mass site", "One happened in 1521", "Accounts differed about the exact date, place, and sequence of events", "One was the 1898 declaration site"], "answer": 2, "explanation": "The Cry has a historiographical controversy based on conflicting eyewitness accounts and later interpretations."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "Which date became associated with the officially recognized Pugad Lawin formulation?", "options": ["December 30, 1896", "June 12, 1898", "February 17, 1872", "August 23, 1896"], "answer": 3, "explanation": "August 23, 1896 became the government-recognized date in the Pugad Lawin formulation."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "What does the Cry controversy demonstrate about eyewitness testimony?", "options": ["Different witnesses can remember and report an event differently", "Eyewitnesses always agree", "Witnesses are never sources", "Memory cannot be studied"], "answer": 0, "explanation": "Eyewitness evidence is valuable but can vary because of memory, time, position, and perspective."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "Which organization is associated with Bonifacio’s revolutionary movement?", "options": ["La Solidaridad", "Katipunan", "Malolos Congress", "National Archives"], "answer": 1, "explanation": "The Katipunan was the revolutionary organization led in part by Bonifacio."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "What is a strong method for studying the Cry controversy?", "options": ["Ignore all testimonies", "Choose the shortest account", "Compare eyewitness accounts and examine their contexts and dates", "Always choose the newest story"], "answer": 2, "explanation": "Historical comparison requires examining witnesses, circumstances, timing, and other evidence."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "Which sequence is correct?", "options": ["Bonifacio → GOMBURZA → 1872", "Bonifacio → First Mass → 1521", "Bonifacio → Independence Act → 1898", "Bonifacio → Katipunan → Cry → 1896 Revolution"], "answer": 3, "explanation": "This sequence captures Bonifacio’s role, the Katipunan, the Cry, and the 1896 Revolution."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "Why is the exact location of the Cry a historiographical issue?", "options": ["Historians weigh conflicting testimonies and reconstructions", "There was no Cry", "The event occurred in 1521", "No eyewitnesses ever existed"], "answer": 0, "explanation": "Different accounts have led historians to examine competing claims about location and timing."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "What broader event did the Cry signal?", "options": ["The Magellan expedition", "The Philippine Revolution against Spanish colonial rule", "The Cavite Mutiny", "The 1898 declaration itself"], "answer": 1, "explanation": "The Cry is tied to the opening of the armed revolutionary struggle in 1896."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "Which person is NOT primarily associated with the Cry?", "options": ["Katipuneros", "Andres Bonifacio", "Antonio Pigafetta", "Emilio Jacinto"], "answer": 2, "explanation": "Pigafetta was associated with the 1521 expedition, not the 1896 Katipunan movement."}, {"lesson": "Lesson 5 — The Cry of Balintawak or Pugad Lawin", "q": "Why can historians accept an official date while still studying controversy?", "options": ["Historians must reject every official conclusion", "Official dates can never be studied", "Official decisions have no evidence", "An official conclusion is itself an interpretation supported by evidence that can still be historically examined"], "answer": 3, "explanation": "Historical study can understand the accepted position while also examining the evidence and competing interpretations."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "Who wrote the Kartilya ng Katipunan?", "options": ["Emilio Jacinto", "Andres Bonifacio", "Emilio Aguinaldo", "Antonio Pigafetta"], "answer": 0, "explanation": "Emilio Jacinto wrote the Kartilya, a guide to Katipunan principles."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "What is the Kartilya best described as?", "options": ["A Spanish tax record", "A guide or primer of Katipunan principles and teachings", "A voyage diary", "A church decree"], "answer": 1, "explanation": "The Kartilya guided members on values, character, and conduct."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "How many teachings are commonly cited in the Kartilya?", "options": ["7", "5", "13", "20"], "answer": 2, "explanation": "The commonly cited version contains 13 teachings."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "Which value is strongly emphasized in the Kartilya?", "options": ["Wealth as the measure of worth", "Absolute inequality", "Obedience to Spain", "Equality and human dignity"], "answer": 3, "explanation": "The teachings emphasize equality, dignity, justice, good character, and concern for others."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "What should determine a person’s worth according to the Kartilya’s moral teaching?", "options": ["Character rather than wealth or appearance", "Amount of money", "Family title only", "Physical appearance"], "answer": 0, "explanation": "The text emphasizes moral character rather than wealth, appearance, or social position."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "What does the Kartilya teach regarding women?", "options": ["Women deserve no moral consideration", "Women should be respected and treated with dignity", "Women should be treated as property", "Women have no place in society"], "answer": 1, "explanation": "Respect for women and their dignity is included among the teachings."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "Which idea is connected to love of fellow human beings?", "options": ["Help only wealthy people", "Seek revenge on everyone", "Treat others as you would want to be treated", "Ignore people in need"], "answer": 2, "explanation": "The Kartilya promotes humane treatment and concern for others."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "Which name-to-document pair is correct?", "options": ["Emilio Jacinto — Act of Independence", "Emilio Jacinto — Customs of the Tagalogs", "Emilio Jacinto — First Mass account", "Emilio Jacinto — Kartilya ng Katipunan"], "answer": 3, "explanation": "Emilio Jacinto is the author associated with the Kartilya."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "What does the Kartilya teach about equality?", "options": ["People should be valued regardless of skin color or social status", "Only rich people deserve respect", "Birth determines moral worth", "Status makes someone automatically superior"], "answer": 0, "explanation": "The teachings reject social status, wealth, or appearance as measures of a person’s fundamental worth."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "What is the purpose of the Kartilya?", "options": ["To teach navigation", "To shape the moral character and conduct of Katipunan members", "To record the First Mass", "To classify Tagalog social classes"], "answer": 1, "explanation": "The Kartilya is a moral and organizational guide for members of the Katipunan."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "Which principle is most consistent with the Kartilya?", "options": ["Power makes every act right", "Money is more important than integrity", "Justice and righteousness should guide actions", "Social class determines moral value"], "answer": 2, "explanation": "The teachings emphasize justice, integrity, good character, and ethical behavior."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "Which Katipunan leader is often studied alongside Emilio Jacinto?", "options": ["Pedro de Valderama", "Ferdinand Magellan", "Juan de Plasencia", "Andres Bonifacio"], "answer": 3, "explanation": "Bonifacio was a founder and major leader of the Katipunan, while Jacinto wrote the Kartilya."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "What does the Kartilya say about wealth and appearance?", "options": ["They should not be the basis of moral worth", "They always determine status", "They are more important than character", "They are the only measures of success"], "answer": 0, "explanation": "The teachings stress character and conduct over wealth, appearance, and status."}, {"lesson": "Lesson 6 — Kartilya ng Katipunan", "q": "What can the Kartilya reveal to historians?", "options": ["That every member behaved perfectly", "The ideals and values promoted within the Katipunan", "The route of Magellan’s ships", "Spanish tax rates"], "answer": 1, "explanation": "The document is evidence of the moral ideals the Katipunan sought to cultivate."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "On what date was Philippine independence proclaimed in Kawit, Cavite?", "options": ["August 23, 1896", "December 30, 1896", "June 12, 1898", "February 17, 1872"], "answer": 2, "explanation": "The proclamation was made on June 12, 1898."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Where was Philippine independence proclaimed?", "options": ["Cavite Arsenal", "Limasawa, Southern Leyte", "Balintawak", "Kawit, Cavite"], "answer": 3, "explanation": "The proclamation took place at the Aguinaldo residence in Kawit, Cavite."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Who proclaimed Philippine independence on June 12, 1898?", "options": ["Emilio Aguinaldo", "Andres Bonifacio", "Jose Rizal", "Emilio Jacinto"], "answer": 0, "explanation": "Emilio Aguinaldo proclaimed independence in Kawit."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Who is associated with writing and reading the Act of the Declaration?", "options": ["Antonio Pigafetta", "Ambrosio Rianzares Bautista", "Juan de Plasencia", "Mariano Gomez"], "answer": 1, "explanation": "Ambrosio Rianzares Bautista is associated with the Act and its reading at the ceremony."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Where did the June 12 ceremony take place?", "options": ["Inside Fort Santiago only", "On Magellan’s ship", "At the Aguinaldo residence in Kawit, Cavite", "At Limasawa"], "answer": 2, "explanation": "The historic proclamation took place at Aguinaldo’s residence in Kawit, Cavite."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "What happened to the Philippine flag during the proclamation?", "options": ["It was taken to Limasawa", "It was torn apart", "It was hidden", "It was officially unfurled"], "answer": 3, "explanation": "The Philippine flag was officially unfurled during the ceremony."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Who is associated with making the Philippine flag used by the revolutionary government?", "options": ["Marcela Agoncillo", "Jose Burgos", "Rajah Kolambu", "Pedro de Valderama"], "answer": 0, "explanation": "Marcela Agoncillo is associated with the making of the flag in Hong Kong."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Who composed the music that became the Philippine national anthem?", "options": ["Emilio Jacinto", "Julian Felipe", "Ambrosio Bautista", "Mariano Gomez"], "answer": 1, "explanation": "Julian Felipe composed the music that became the Philippine national anthem."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Which document is associated with the 1898 proclamation?", "options": ["Customs of the Tagalogs", "Kartilya ng Katipunan", "Acta de la Proclamación de la Independencia del Pueblo Filipino", "Pigafetta’s narrative"], "answer": 2, "explanation": "The Acta de la Proclamación de la Independencia del Pueblo Filipino is the declaration document."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Why is the Act a primary source?", "options": ["It was written in 1521", "It was a modern textbook", "It is a fictional retelling", "It is an original document produced in the context of the 1898 proclamation"], "answer": 3, "explanation": "The Act is a historical document from the period and event it records."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Which memory chain best summarizes Lesson 7?", "options": ["June 12, 1898 → Kawit → Aguinaldo → Bautista → Independence", "1872 → Cavite → GOMBURZA → Jacinto", "1521 → Limasawa → Pigafetta → Bonifacio", "1896 → Pugad Lawin → Plasencia → Rizal"], "answer": 0, "explanation": "This chain gives the date, place, leader, key document figure, and event."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "What major event is proclaimed in the Act?", "options": ["The First Mass", "The independence of the Philippine people", "The Cavite Mutiny", "The Cry of Pugad Lawin"], "answer": 1, "explanation": "The Act proclaims the independence of the Philippine people."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Which person is correctly matched with the declaration?", "options": ["Emilio Jacinto — proclaimed independence", "Antonio Pigafetta — proclaimed independence", "Emilio Aguinaldo — proclaimed independence", "Juan de Plasencia — proclaimed independence"], "answer": 2, "explanation": "Aguinaldo proclaimed independence on June 12, 1898."}, {"lesson": "Lesson 7 — Act of the Declaration of Philippine Independence", "q": "Why should the Act be studied as a document rather than only as a date?", "options": ["It was written by Magellan", "It has no historical meaning", "It is a modern summary only", "Its wording, purpose, authorship, and context reveal how independence was presented"], "answer": 3, "explanation": "Primary documents show how people at the time framed their goals, claims, and political actions."}, {"lesson": "Mixed Review — Lessons 1–7", "q": "Which sequence is in chronological order from earliest to latest?", "options": ["First Mass → Cavite Mutiny → Cry → Declaration of Independence", "Cavite Mutiny → First Mass → Declaration → Cry", "Cry → First Mass → Cavite Mutiny → Declaration", "Declaration → Cry → Cavite Mutiny → First Mass"], "answer": 0, "explanation": "The four events are 1521, 1872, 1896, and 1898 respectively."}];
+let count=100,pool=[],pos=0,score=0,streak=0,locked=false,answers=[];
+
+function shuffle(a){
+ const x=[...a];
+ for(let i=x.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [x[i],x[j]]=[x[j],x[i]];
+ }
+ return x;
+}
+
+function startQuiz(){
+ count=Number(document.getElementById('count').value);
+ if(count===100) pool=shuffle(BANK.map((_,i)=>i));
+ else {
+  const by={};
+  BANK.forEach((q,i)=>(by[q.lesson]??=[]).push(i));
+  const lessons=Object.keys(by),picked=[];
+  const per=Math.floor(count/lessons.length);
+  lessons.forEach(l=>picked.push(...shuffle(by[l]).slice(0,per)));
+  while(picked.length<count){
+   const rest=shuffle(BANK.map((_,i)=>i).filter(i=>!picked.includes(i)));
+   if(!rest.length)break;picked.push(rest[0]);
+  }
+  pool=shuffle(picked.slice(0,count));
+ }
+ pos=0;score=0;streak=0;locked=false;answers=[];
+ document.getElementById('start').classList.add('hidden');
+ document.getElementById('result').classList.add('hidden');
+ document.getElementById('quiz').classList.remove('hidden');
+ render();
+}
+
+function render(){
+ locked=false;
+ const q=BANK[pool[pos]];
+ document.getElementById('meta').textContent=`${q.lesson} • Question ${pos+1} of ${pool.length}`;
+ document.getElementById('question').textContent=q.q;
+ document.getElementById('score').textContent=score;
+ document.getElementById('streak').textContent=streak;
+ document.getElementById('bar').style.width=`${pos/pool.length*100}%`;
+ const list=document.getElementById('choices');list.innerHTML='';
+ const fb=document.getElementById('feedback');fb.className='feedback';fb.innerHTML='';
+ document.getElementById('next').classList.add('hidden');
+ q.options.forEach((txt,i)=>{
+  const b=document.createElement('button');
+  b.className='choice';
+  b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${txt}`;
+  b.onclick=()=>answer(i);list.appendChild(b);
+ });
+}
+
+function answer(selected){
+ if(locked)return;locked=true;
+ const q=BANK[pool[pos]],btns=[...document.querySelectorAll('.choice')];
+ btns.forEach(b=>b.disabled=true);
+ btns[q.answer].classList.add('correct');
+ const ok=selected===q.answer;
+ if(ok){score++;streak++;}else{streak=0;btns[selected].classList.add('wrong');}
+ answers.push({bankIndex:pool[pos],selected,correct:q.answer,ok});
+ document.getElementById('score').textContent=score;
+ document.getElementById('streak').textContent=streak;
+ const fb=document.getElementById('feedback');
+ fb.className='feedback '+(ok?'good':'bad');
+ fb.innerHTML=`<b>${ok?'✓ CORRECT — RECORD VERIFIED':'✗ INCORRECT — CONSULT THE RECORD'}</b><br>${q.explanation}`;
+ document.getElementById('next').classList.remove('hidden');
+}
+
+function nextQuestion(){
+ pos++;
+ if(pos>=pool.length)finish();else render();
+}
+
+function finish(){
+ document.getElementById('quiz').classList.add('hidden');
+ document.getElementById('result').classList.remove('hidden');
+ document.getElementById('bar').style.width='100%';
+
+ const total=pool.length,wrong=total-score,pct=Math.round(score/total*100);
+ document.getElementById('final').textContent=score;
+ document.getElementById('total').textContent=total;
+ document.getElementById('correct').textContent=score;
+ document.getElementById('wrong').textContent=wrong;
+ document.getElementById('accuracy').textContent=pct+'%';
+
+ let msg;
+ if(pct===100)msg='🏆 PERFECT ARCHIVE — ALL SEVEN LESSONS CONQUERED!';
+ else if(pct>=90)msg='🔥 EXCELLENT — YOUR HISTORICAL RECORD IS STRONG.';
+ else if(pct>=80)msg='⚔︎ GREAT WORK — REVIEW THE MISSED RECORDS.';
+ else if(pct>=70)msg='📜 SOLID PROGRESS — RETURN TO THE ARCHIVE.';
+ else msg='🕯︎ BACK TO THE ARCHIVE — STUDY THE EXPLANATIONS AND TRY AGAIN.';
+ document.getElementById('message').textContent=msg;
+
+ const missed=answers.filter(x=>!x.ok),review=document.getElementById('review');
+ review.innerHTML=missed.length
+ ? '<h3>📜 MISSING RECORDS — QUESTIONS TO REVIEW</h3>'+
+   missed.map(x=>{
+    const q=BANK[x.bankIndex];
+    return `<div class="review-item">
+      <div class="rq">${q.q}</div>
+      <div><b>Your answer:</b> ${q.options[x.selected]}</div>
+      <div><b>Correct answer:</b> ${q.options[q.answer]}</div>
+      <div style="margin-top:7px;color:#6d5338">${q.explanation}</div>
+    </div>`;
+   }).join('')
+ : "<div class='review-item'><b>✦ PERFECT RECORD.</b> No missed questions to review.</div>";
+}
+
+function restart(){
+ document.getElementById('quiz').classList.add('hidden');
+ document.getElementById('result').classList.add('hidden');
+ document.getElementById('start').classList.remove('hidden');
+ document.getElementById('bar').style.width='0%';
+}
+</script>
+</body>
+</html>
